@@ -1,0 +1,434 @@
+Chap 2 
+
+let X = (x1, x2, ..., xp) be a feature vector. We would like to estimate the following:
+
+Y = f(X) + e, where E(e) = 0. e is independent of X.
+
+We assume that Y is related to X via the function f. f is fixed, but unknown function of features.
+
+Why estimate f? For prediction and inference.
+
+1) Prediction. Errors consist of reducible and irreducible.
+2) Inference. Would like to know how predictor variables affect response variables
+
+How to estimate f?
+1) Parametric
+	- assume f takes a certain functional form/ select the model. The assumed f can deviate from the real f by a huge distance. Note that
+	  we can choose flexible models to fit f, but can risk overfitting (i.e. fitting the noise instead).
+	- use training data to fit f
+	- reduces the problem to fitting a set of parameters
+
+2) Non parametric
+	- does not assume a functional form, and can generate a wider range of shapes
+	- downside: does not reduce the problem to estimating a set of parameters, hence a lot of observations are needed for an accurate estimate of f
+	
+Flexibility versus interpretability
+- there is always a tradeoff. The more restrictive (e.g. lasso, regression) yields more interpretability but less flexibility and vice versa.
+
+xxxxxx
+Chap 3
+xxxxxx
+
+-----------------------------------------------
+A few things to consider about Linear Regression
+-----------------------------------------------
+
+ONE: Is there a relationship between predictors and response?
+
+Test if there is a relationship between predictors and response
+- Overall F-test: F = {({TSS - RSS)/ p } / (RSS / n-p-1)
+- If linear model assumptions are correct E(RSS/n-p-1) = \sigma^2 and if H0 is true, E((TSS - RSS) /p) = \sigma^2. 
+- Therefore if H0 is correct, we expect a F-stat that is close to 1, and greater than 1 otherwise.
+- The significance of F is related to the sample size n and number of predictors. Small n requires a much bigger F-statistic and vice-versa.
+
+Why use F-stats when p-value for individual variable is available. Consider the case of number of predictors = 100. Assuming H0 is true: \beta_1 = \beta_2 = ... =
+\beta_100, we will expect 5% of predictors to be significant. Therefore trying to conclude the association between predictors and response in the event of a large number
+of predictors is flawed. To correct for this, use F-stats that accounts for the number of predictors.
+
+F-stats cannot be used when p (number of predictors) > n (sample size). You cannot even fit a multiple linear regression.
+
+TWO: Deciding on important variables.
+- Forward selection (greedy approach, might include variables that are significant earlier). Start with null model, then include variables one by one
+- Backward selection (start with all variables, then drop the insignificant variables)
+- Mixed selection (Forward + Backward)
+
+Forward selection always works, backward selection only works if n > p.
+
+- Given a set of predictors, we can fit a bunch of models (e.g. all subsets of predictors). Then the next question is how to choose among these models?
+- Some criteria include: Mallows' C_p, BIC, AIC and adjusted R^2
+
+THREE: Model Fit
+Consider the following measures:
+- R^2 (which always increases as more variables are included; why? think of if (A \subset B) => inf(A) >= inf(B) or RSS(A) >= RSS(B), where A has less variables than B)
+- Residual Standard Error, RSE (RSE = sqrt(RSS / n-p-1). RSE can increase or decrease, depending on the relative decrease in RSE. If the relative decrease in numerator is less than the relative decrease
+  in denominator (meaning that addition variables do not bring to a subtantial decrease in RSS) 
+  ==> increase in RSE and vice-versa (When in doubt, just use a quick working example to illustrate this).
+- Plotting the data; observe any non-linear pattern on residuals; suggests a possibility of interactions
+
+FOUR: Predictions
+
+There are several sources of uncertainty:
+	- Reducible error (error of estimating the real coefficients + model bias); the errors can be reduced if we use a more flexible model + more sample points to
+	estimate the coefficients
+	- Irreducible error; even we know the true population coefficients, there is the epsilon term that you cannot remove.
+
+As such, there is a need to quantify the uncertainty:
+	- confidence interval for the f(X)
+	- prediction interval for the real Y 
+	- prediction interval is always wider than the confidence interval (because of the extra term in the formula)
+	- formulas not available in ISLR
+
+--------------------------------------------
+Other considerations in the regression Model
+--------------------------------------------
+
+ONE: Qualitative Variable (Recall one-hot encoding and something along that line)
+For binary case, code in 0 or 1. But it is also possible to code in 1 and -1, which would yield a slight different interpretation of the equation.
+We always code categorical variables into dummy variables
+
+TWO: Extending Linear Models with interaction effect
+
+We relax the assumption and allow for synergy/ interaction effect. i.e. an increase of one unit of X_1 on Y is affected by another variable X2.
+The question of whether one should omit lower order terms (that are probably not significant) in the presence of interaction terms is not clearly explained.
+The rule of thumb (hierachical principle) states that if we include interaction terms in a model, we have to include main effect terms regardless of whether 
+they are significant or not. 
+
+The interaction is mostly done through the multiplication, i.e. take X_1 and multiplied by X_2.
+
+An interaction between categorical variable and quantitative variable has a pretty nice interpretation. It is amount to fitting several regression lines with different 
+intercept and slope as the categorical variable takes on different values.
+
+THREE: Non-linear relationships
+Include higher order terms to model potential non-linear relationship (e.g. polynomial of higher orders)
+
+------------------
+Potential Problems
+------------------
+
+ONE: Non linearity of the data
+- can be identified via residual plot (residuals versus fitted values).
+- think of a linear fit versus a quadratic fit. If the relationship is non-linear (quadratic, say), residuals as a result 
+of linear fit will show discernible patterns
+
+TWO: correlation of error terms (problem of auto-correlation)
+- easily observed in time series data
+- understates standard errors,result in narrower confidence interval (i.e. more often than not you will conclude there is a significant effect, while 
+	there isn't)
+- example would be just simply double the available data points (2 copies of the original data), fit the parameters and
+  observe the confidence interval
+
+THREE: Non constant variance of error terms (heteroskedasticity)
+- can be observed by a funnel shape (fanning outwards) of the residuals
+- several remedies: transformation of variables using concave function (log, square root). Larger values are shrinked more.
+- alternatively, use weighted least squares
+
+FOUR: Outliers
+- can severely impact the residual standard error (RSE), R square and so on.
+- can use residual plot to identify outliers
+- how far off the data from the average to be considered an outlier? consider using studentized residuals.
+- studentized residuals > 3 for an observation is a rule of thumb for outlier
+- outliers could be a result of error in data collection, but could also signify some underlying problems in model deficiency 
+ (missing predictors and so on)
+ 
+FIVE: Leverage Points
+- there is a need to identify high leverage points since they could potentially invalidate the best fit line
+- removing high leverage points could potentially impact the best fit line more substantially than removing outliers
+- on a 2-d problem, it is easy to identify the point with high leverage (i.e. the standalone point far away from the rest of the x's)
+- on a higher dimension, each X may not stand out in terms of their value, but as a combination of all these X's, they may stand out as a 
+  high leverage point (e.g. point below the ellipse)
+- the average leverage statistic is always (p + 1)/n; if the leverage statistic of an observation greatly exceeds this value, then this
+  point may have a high leverage
+  
+SIX: Collinearity
+- happens when variables are close to each other
+- collinearity reduces the accuracy of estimates for the regression
+- could cause the estimates of parameters to deviate quite wildly (standard errors for the estimates increase) -> t-statistic to decrease
+- t-statistic decrease -> higher chance of failing to reject null hypothesis -> power of the test decreases
+- correlation matrix is not sufficient to detect collinearity; use Variance Inflation Factor (VIF)
+- Rule of thumb: VIF > 5 (or 10) is an indicator of collinearity
+
+--------------------------------------------------------
+Linear Regression vs K-Nearest Neighbor Linear Regression
+--------------------------------------------------------
+KNN Linear Regression is parametrized by K, the K-nearest training data located to x0, the test data. We take the K-nearest training
+data, look at their f(x), and average them.
+
+K = 1 (flexible; lower bias, higher variance)
+K = 10 (less flexible, smoother; higher bias, lower variance)
+
+
+----------------------
+Chap 4: Classification
+----------------------
+
+Logistic Regression
+
+-Odds = p(x) / (1 - p(x))
+	- ranges from 0 to inf
+	- E.g. odds of 1:4 implies that 1/5 chance of event = 1 and 4/5 chance of event = 0
+	- E.g. odds of 9:1 implies that 9/10 chance of event = 1 and 1/10 chance of event = 0
+- logit (i.e. log of odds) is linear in X (log(odds) = b0 + b1 * X)
+	- an increase of one unit of X increases one unit of logit (or multiply odds by exp(b1))
+	- if b1 > 0 , then change of x is associated with a positive increase in p(X) (but not to above 1)
+	- if b1 < 0 , then change of x is associated with a decrease in p(X) (but not to below 0)
+- maximum likelihood
+- likelihood function
+- fitting logistic regression in python
+	import statsmodels.formula.api as smf
+	logreg = smf.glm(formula = 'default ~ balance', data = df, family = sm.families.Binomial()).fit()
+- confounding effect (i.e. regression against one variable, more than variables and so on)
+
+Linear Discriminant Analysis (LDA)
+
+- in a nutshell: LDA makes some assumptions on the conditional distribution of predictors 
+	(i.e. P( X=x | Y=k)). With that assumption, we derive a discriminant function which is linear in terms of x
+	and depends on category k, and then assign to X=x the category k of which the discrimant function is the maximum.	
+
+- estimate of P(Y = k | X = x) indirectly. First consider P(X = x | Y = k), then use this to estimate P(Y = k | X = x)
+  via Bayes' Theorem
+- Why use another method in place of logistic regression?
+	- when classes are well-separated, estimates for parameters in logistic regression are unstable
+	- if number of observations is small and X's are approximately distributed normally, LDA is more stable
+	- LDA is more popular than Logistic Regression
+	
+- P(Y = k |X = x) = P(Y = k, X = x)/ P(X = x) = P(X = x | Y = k) * P(Y = k) / P(X = x); P(X = x | Y = k) is where you make an assumption
+	about the distribution.
+- Call P(Y = k | X = x) as the posterior probability
+- The challenge is to estimate P(X = x | Y = k), though the book assumes it is either univariate Gaussian (for p = 1)
+  or multivariate Gaussian for p > 1 (with a constant covariance matrix)
+- sensitivity (number of real defaulters being identified)
+- specificity ( number of real non-defaulters being identified)
+- in the ISLR example, the specificity is high, but sensitivity is low.
+- As LDA tries to approximate the Bayes classifier, it tries to minimize the *total error rate* of overall misclassification 
+	(regardless of what kind of errors)
+- In the credit card example, the credit card company will most likely prioritize the classification of defaulters (i.e.
+	try to get as many correct defaulters as possible) over the classification of non-defaulter (which is ok and be a bit more
+	risk-averse). So one solution is to lower the threshold of posterior probability so that we will get more real defaulters
+	being identified, at the costs of increase in overall error rate (this implies that a lot more non-defaulter will be
+	classified as defaulter, increasing FP rate.)
+- In general, as you decrease the threshold, you will have a lower error rate of classification of Y = 1, but this results
+	in a higher rate of classification of Y = 0 (and a higher overall error rate of classification)
+-	summary of the classifier performance over all possible thresholds is given by the area under the ROC curve (AUC).
+-   show that for all posterior probability thresholds, the relationship between TPR and FPR is positively correlated.
+	- as you decrease thresholds , get more positive values, sensitivity increases, specificity decreases (more negatives get classified
+		into positives), FPR (= 1 - specificity) increases. Establishing the positive relationship between TPR and FPR.	
+- 	try plott
+
+Quadratic Discriminant Analysis (QDA)
+
+- difference between QDA and LDA 
+	- LDA assumes the same covariance matrix for all classes
+	- QDA assumes potentially different covariance matrix for each class
+- Under what conditions should we choose QDA or LDA?
+	- if the underlying covariance matrixes are all the same -> choose LDA, because the Bayes decision boundary is linear.
+	- also if training observations is not many and reducing variance is crucial, choose LDA (because it is less flexible
+	  than QDA).
+	- if the underlying covariance matrixes are dependent on classes -> choose QDA, because the Bayes decision boundary
+	  is quadratic
+	- if there are many training observations and variance reduction is less of a concern -> choose QDA
+	- if assumption of same covariance matrix for all classes is not feasible -> choose QDA
+
+	
+-------------------------
+Chap 5: Resampling Methods
+-------------------------
+
+- cross-validation and bootstrap
+	- cv -> assess test errors
+	- bootstrap -> measure accuracy of parameter estimates
+
+- model assessment: evaluating model performance
+- model selection : select the right model flexibility
+
+Cross-validation  (CV)
+
+- training error is easy to compute, but not so for test error because of a lack of designated test set
+- one way to estimate the test error is cross validation
+- validation-set approach 
+	- split data randomly into training and validation set (say, 50% training and 50% validation)
+	- train on the training set, fit the model on validation set, compute the objective function (e.g. MSE); repeat n times
+	- drawbacks of this approach:
+		- estimate of test MSE is highly variable since the splitting into train/valid sets is random
+		- tends to overestimate test error as training on fewer observations always results in poorer performance
+- leave-one-out-cross-validation (LOOCV); potentially expensive
+	-for ordinary least-square problem, the estimate of test error can be computed as CV_(n), which involves the leverage, h_i
+	of each observation. In general, you may have to refit the model n times.
+- k-fold cross-validation
+	- LOOCV is a special case where k = n
+	- computationally less expensive than LOOCV
+	- if we repeat (say, 10 times) of k-fold cross validation, we will get a much lower variability in terms of estimates of 
+		test MSE
+	- the estimate of test MSE via k-fold CV has a lower variance than the estimate of test MSE via LOOCV (because the mean of
+	highly correlated random variables has a higher variance than the mean of less correlated random variables).
+	- k = 5 or k= 10 are common numbers that are empirically shown to yields estimates of test errors that are neither too biased nor
+	high variance
+
+Bootstrapping as a way to measure the standard error of an estimate:
+
+- Suppose you have a statistic of interest, say, alpha. Alpha is a number that minimizes the overall risk of an investment portfolio
+  that consists of financial instruments X and Y. Alpha is a function of variance of X, variance of Y and correlation of X and Y. We would like
+  to estimate the true alpha, along with the standard error. 
+- The ideal way is to have 100 simulations of the underlying true population. For each simulation, compute sample estimate of Var(X), Var(Y) and Corr(X, Y),
+  then you get 100 estimates of alpha. You then compute the average alpha (as an estimate of real alpha) and also the variance of the estimates (standard error 
+  of your estimate). However, more often than not, you will only get one dataset instead of 100 datasets for you to compute the statistic of interest.  
+- Here comes bootstrap, where given just one dataset, you conduct repeated sampling of this data set. Say you conduct B times resampling of the dataset,
+  you will yield B datasets. Then you can compute the statistic of interest (say, alpha defined previously). You get B estimates in the end and average them out
+  to get an estimate of the underlying alpha.
+  
+-------------------------------------------------
+Chap 6: Linear Model Selections and Regularization
+-------------------------------------------------
+xxxxxxxxxxxxxxxxxxxxx
+6.1: Subset Selection
+xxxxxxxxxxxxxxxxxxxxx
+
+Algo 6.1: Best Subset Selection Model (Linear Regression)
+---------------------------------------------------------
+1. Fit M_0 Model
+2. for k=1, 2, ..., p:
+	- fit (pCk) models
+	- select the best model out of (pCk) models, call it M_k. Best is defined in terms of highest R^2
+3. Select the best models out of M_0, M_1, ..., M_p using cross-validated prediction errors
+	
+Algo 6.2: Forward Selection
+----------------------------
+1. Fit M_0 model without any predictor
+2. for k = 0, 1, 2, ..., p-1:
+	- consider p-k models that augment the M_0 model
+	- find the best among all these p-k models, call it M_(k+1) model
+3. Select the best models out of M_0, M_1, ..., M_p models
+
+Note: Best Subset Selection Model is computationally infeasible for large p. Forward selection is computationally more feasible compared to 
+	  Best Subset Selection, however it is not guaranteed to find the best model (viz-a-viz best subset selection). Note also that forward selection
+	  is applicable even when n < p (not the case for backward selection).
+
+Algo 6.3: Backward Selection
+----------------------------
+1. Fit M_p, M_p is defined as the model that has all p predictors.
+2. For k = p, p-1, ..., 1:
+		- consider all k models that contain all but one of the predictors in M_k,
+		  for a total of k-1 models
+		- choose the best among these k-1 models; best is defined as having highest R^2.
+		  Call it M_k-1
+3. Select the best models out of M_0, M_1, ..., M_p models
+
+Hybrid Approaches: Forward Selection + Backward Selection (After adding the variables one at a time, do a back-ward selection on existing variables)
+
+Selecting Optimal Model   
+-----------------------
+The subset selection models (aforementioned) select models based on lowest training error. Recall that RSS always
+decreases/ R^2 always increases when you include more variables. So the question is, select models with how many variables?
+
+We can select the number of variables based on the following criteria (in the context of least square):
+Mellow's C_p, Akaike Information Criterion (AIC), Bayesian Information Criterion (BIC), Adjusted R^2
+
+Formula for the criteria:
+- Mellow's C_p = 1/n (RSS + 2d \hat{\sigma}). Note the penalty added to the RSS. d:= number of variables in the model
+- AIC:
+- BIC:
+- Adjusted R^2:
+
+BIC penalyzes models with many variables (compared to C_p), so in general it chooses a model with fewer variables as compared to Mellow's C_p
+
+Alternative to using these metrics and thanks to the advancement of computing, we can use cross validation.
+
+Validation Error/ Cross Validation Error
+Validation Error: Computed by splitting data into training and validation set
+CV-Error: Computed by k-fold 
+
+Use one-standard-error rule to select the model with fewest variables.
+
+xxxxxxxxxxxxxxxxxxxxx
+6.2 Shrinkage Method
+xxxxxxxxxxxxxxxxxxxxx
+
+Ridge Regression
+----------------
+- formulation of ridge regression
+Ridge Regression selects parameters that minimize the following:
+RSS + \lambda ||b|| (2-norm squared) (note that ||b|| excludes the intercept)
+
+- \lambda is chosen based on cross-validation. If \lambda = 0, usual least square regression. As \lambda -> \infty, the parameter estimates will shrink to 0
+- In standard least square, if you scale X_j by a factor of `c`, then `\beta_j` will be automatically scaled by a factor of `1/c`. This is known as 
+	equivariant
+- However, in ridge regression, such scaling does not guarantee equivariant. As such, it is ADVISABLE to first standardize the predictors first, then only apply
+  the ridge regression.
+
+- Ridge Regression works best in situations where the least square estimates have high variance.
+
+Lasso regression
+----------------
+- The problem with ridge regression is that all predictors will be included in the model. If \lambda large, then coefficients will be small,
+  but no parameter will be excluded. For large p, ridge regression can potentially pose problems in interpretation when all variables are included 
+  in the model.
+- The formulation of lasso is similar to ridge regression, with the L2 norm term in ridge regression replaced by L1 norm.
+- When \lambda is sufficiently large, some of the parameter estimates will be set to be EXACTLY zero. As such, lasso regression automatically performs
+  variable selection.
+
+- Note that lasso regression performs feature selection, while ridge regression does not.
+- How can lasso regression does the feature selection? Recall that |\beta_1| + |\beta_2| <= s is a diamond-shaped constraint. The contour of RSS may
+  intersect at the corner, resulting in one of the parameters being zero, as opposed to a circle-shaped constraint of which the contour of RSS intersects at 
+  points other than corners.
+  
+Prediction accuracy of Lasso versus Ridge Regression
+----------------------------------------------------
+Bottomline: 
+	- Lasso outperforms at the setting where there are only relatively small number of predictors which have substantial coefficients.
+	- Ridge regression outperforms when the response is a function of many predictors
+
+In real life scenario, we often don't know apriori which method is better. Use cross-validation instead!
+
+On the different kind of shrinkage performed by Ridge/ Lasso
+	- for ridge, the least square coefficients are shrunken by a proportional amount.
+	- for lasso, the least square coefficients are shrunken by a constant amount towards zero. (aka soft-thresholding)
+	- refer to Figure 6.12
+	
+TO READ:
+	-	Bayesian Interpretation for Ridge Regression and Lasso
+	-	Selecting the tuning parameter (\lambda)
+	
+Dimension Reduction Methods
+---------------------------
+- write the formulation of dimension reduction methods.
+	- the formulation is such that the dimension reduction method is a special case of linear regression where the betas are subject to constraints
+- least squares based on M transformed variables (where M < p, the number of original variables) can outperform the original least squares,
+  if the new coefficients are chosen carefully
+- to frame it differently, suppose we have X_1, X_2, ..., X_p `p` predictors, we would like to transform these `p` predictors to `M` variables such that M < p. We
+	call these transformed variables Z_1, Z_2, ..., Z_M. These Z's are uncorrelated with each other, and that the first extracted component will capture the largest variation
+	among the Xs, the second extracted component will capture less variation and even less variation for subsequent extracted components.
+ 
+
+Principal Components Regression (PCR)
+------------------------------
+- extract Z_1, Z_2, ..., Z_M principal components and fit a linear regression.
+- since the Z's are a linear combination of all original features, PCR is more closely related to ridge than to lasso regression
+- the number of principal components is chosen by cross-validation
+- recommend standardizing variables when performing PCR (x_ij divided by sample standard deviation of the variable) since high-variance models can affect the final outcome of the model
+- if all variables are all measured on the same scale, standardization is optional.
+
+Partial Least Square (PLS)
+--------------------------
+- in PCA, we are constructing fewer principal components that help explain the variation in X's. This is however done without referring to Y, the response variable.
+- PLS attempts to find directions (or linear combinations) the explain BOTH predictors and response. 
+- When finding the first component, PLS takes into account (or places more weight onto) predictors that are highly correlated with the response, thus yielding a direction that is
+  tilted towards variables that are highly correlated with the responses.
+- hand-waving way of the algorithm:
+	- Suppose we have X_1, X_2, ..., X_p predictors and a response variable Y.
+	- To obtain Z_1, \phi_j1 is set to the coefficient of simple linear regression of Y onto X_j. As a result, Z_1 places the highest weightage on variables X_j that has the highest
+	  correlation with Y.
+	- To obtain Z_2, regress each X on Z_1, get the residuals for each X (adjusted for Z_1) (thought of as information not captured by the first PLS component). 
+		Regress Y on each residual variable for X, get the coefficients, set these coefficients equal to \phi_j2.
+	- Repeat till M PLS components are constructed.
+	
+
+
+
+	
+
+
+
+
+
+
+
+  
