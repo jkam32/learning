@@ -1,0 +1,42 @@
+Chap 1 Intro
+------------
+- Keras (backend using Theano / Tensorflow); by Francois Chollet
+- mxnet (distributed; multi-machine learning)
+- OpenCV
+- scikit-image
+- scikit-learn
+- expected outcome of the book
+	- load image
+	- preprocess image (for training a CNN)
+	- build own implementation of CNN
+	- implement popular CNN architecture (AlexNet, VGGNet, GoogLeNet, ResNet, SqueezeNet)
+	- etc
+
+Chap 2 What is Deep Learning?
+-----------------------------
+- DL \subset ML \subset AI
+	- AI: automatic machine reasoning
+	- ML: pattern recognition and learning from data
+		- Artificial Neural Network (ANN) is one algorithm that specializes in pattern recognition / data learning
+	
+- History of NN and DL
+	- 1943 			- first NN by McCulloch and Pitts - binary classifer with manual tuning of weights on inputs 
+	- 1950s 		- Perceptron algorithm by Rosenblatt - automatic learning of weights - the automatic procedure is a basis of Stochastic Gradient Descent (SGD)
+	- 1969 			- publication by Minky and Papert - showed that Perceptron with a linear activation (regardless of depths) cannot solve a non-linear problem;
+					- XOR dataset as an example (a non-linear problem); impossible to draw a straight line that separates the two types of objects
+					- almost killed the research on NN
+	- 1970s - 1980s - Werbos + Rumelhart + LeCun - backpropagation algorithm - enables the training of multi-layered feedforward NN
+					- combined with non-linear activation functions can solve the XOR problem
+					- the backprop algorithm allows the NN to learn from the mistakes
+					- slow technology + lack of labelled training datasets cause NN computation of more than 2 hidden layers infeasible
+					- technology advancement has made training of multiple hidden layers feasible
+						- aka Deep Learning
+						- multiple hidden layers enable hierachical learning
+							- base layer learns simple concepts
+							- higher layers learn the abstractions
+						- prime example 
+							- Convolutional Neural Network (CNN) by LeCun in recognizing hand-written digits
+							- learns discrimating patterns (filters) by stacking layers on top of each other
+							- base layers learns edges and cornes
+							- higher layers build on top of base layers for discrimation of different digits
+						
