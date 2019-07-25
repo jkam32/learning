@@ -80,3 +80,43 @@ Chap 3: Image Fundamentals
 Chap 4: Image Classification Basics
 -----------------------------------
 
+- What is image classification?
+	- Let there be an image I of W x H x 3 = N pixel, where W = width, H = height and 3 = depth of the color space (RGB in this case), and let there be categories of {A, B, C}. Image classification involves taking the image I and outputs a label 'A', 'B' or 'C' or a vector of probabilities associated with the probability of I belonging to 'A', 'B' or 'C'.
+	- NB that our dataset consists of a collection of data points (images)
+
+- Semantic Gap
+	- Humans can differentiate cat and dog easily, but computers see the images as a big matrix of numbers. The difference between how human and computer sees an image is known as semantic gap.
+
+- Possible Challenges
+	- viewpoint variation - no matter how an object 'A' is rotated, it is still object 'A'
+	- scale variation - tall, grande, venti coffee mug, still a coffee mug!
+	- deformation - Recall the Gumby characters 
+	- occlusions (part of object hidden) - picture of dog versus picture of dog under a blanket
+	- illumination - an object subjet to different lighting conditions
+	- background clutter - Where's Wally?
+	- intra-class variation - all the different chairs, are still considered chairs
+	- The classifier must handle the combination of the challenges aforementioned.
+	- The success of an image classification job depends on the scope.
+		- Too broad a scope (try to classify everything) can cause the project to fail easily.
+		- A narrower/ more well-defined scope make the projects easier to manage.
+
+- Types of Learning
+	- Supervised
+	- Unsupervised
+	- Semi-supevised - only a subset of training data is labelled; we try to label the rest of the unlabelled data and utilize them as additional training data; need to tolerate a degree of inaccuracy
+	
+- Deep Learning Pipeline
+	- Instead of writing a gazillion of if/else statements to differentiate images, we let the algorithms learn on their own.
+	- Step 1 - Gather images and their labels (a finite set of categories)
+				- Try to ensure each category is uniformly well-represented (i.e. each category has more or less same samples)	
+				- If a category is overly represented - could lead to overfitting on that category.
+				- There may be a need to deal with class imbalances.
+	- Step 2 - Split dataset (Train / Test)
+				- How about the hyperparameters? Set them using a validation set (which comes from training data and is a fake test set)
+	- Step 3 - Train the network
+	- Step 4 - Evaluate the network
+
+- Traditional ML techniques on image classification involve feature extraction (raw pixels -> vector of numbers used for training). There is no need of feature extraction for a CNN.
+
+- There is a chance that trained NN performs well on test set does not perform well on new unseen data. This is a matter of generalization and will be discussed further.
+		
