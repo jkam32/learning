@@ -26,6 +26,7 @@ Chap 2 What is Deep Learning?
 					- XOR dataset as an example (a non-linear problem); impossible to draw a straight line that separates the two types of objects
 					- almost killed the research on NN
 	- 1970s - 1980s - Werbos + Rumelhart + LeCun - backpropagation algorithm - enables the training of multi-layered feedforward NN
+					- TODO: Draw an example of multi-layered feedforward NN
 					- combined with non-linear activation functions can solve the XOR problem
 					- the backprop algorithm allows the NN to learn from the mistakes
 					- slow technology + lack of labelled training datasets cause NN computation of more than 2 hidden layers infeasible
@@ -39,4 +40,43 @@ Chap 2 What is Deep Learning?
 							- learns discrimating patterns (filters) by stacking layers on top of each other
 							- base layers learns edges and cornes
 							- higher layers build on top of base layers for discrimation of different digits
-						
+
+- Hierachical Feature Learning
+	- ML algorithms fall under - (I) supervised (II) unsupervised (III) semi-supervised
+	- ML and image classification  - identify patterns used to differentiate different images
+	- Historically, hand-engineered features are used to quantify the contents of an image (i.e. raw pixels are not fed into the algorithm, 
+		and feature extractions are first performed)
+		- feature extractions are some black-box algorithms that output a vector of information that seeks to quantify the images
+			- notable examples
+				- Histogram of Oriented Gradient(HOG) + Linear SVM - detect objects where viewpoint angle of images did not vary much from trained images
+
+	- Instead of hand-defining the processes, DL (or CNN) learns the features automatically.  
+
+- How "Deep" is deep?
+	- > 2 layers of NN
+	- DL is always associated with "more data leads to higher accuracy" (compared to traidional ML techniques which accuracy pleateaus with the increase of available data points
+
+Chap 3: Image Fundamentals
+--------------------------
+
+- Pixels
+	- building blocks of every image
+	- can be represented on 
+		- grayscale - [0, 255]
+		- color using RGB scale, where each color space is on a scale of [0, 255]
+			- RGB is an example of an additive color space (the more you add of each color, it tends towards bright colors)
+	- denoted in the unit of x pixels wide, y pixels tall for a dimension of (x, y)
+	- we always preprocess the image via mean substraction or scaling
+	- the origin always starts at the top left, instead of the conventional bottom left
+	- when accessing the coordinate of a pixel, probably easier to think in terms of row first (in terms of y) then followed by column (in terms of x)
+	- in openCV, watch out that the color is stored in the reverse order of BGR (rather than RGB) due to historial reasons
+	- scaling and aspect ratios
+		- aspect ratio := width / height
+		- scaling without maintaining the aspect ratios can always to lead to distortion of images
+		- image classification algorithms always assume fixed-size input (in the form of (z X z, where z = 32, 64, 224, 227, 256, 299 among popular choices))
+		- options include ignoring ratios and resize, resize along shortest dimension & center crop etc
+		- no best method of scaling/ resizing
+
+Chap 4: Image Classification Basics
+-----------------------------------
+
