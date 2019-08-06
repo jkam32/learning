@@ -72,7 +72,7 @@ Chap 3: Image Fundamentals
 	- in openCV, watch out that the color is stored in the reverse order of BGR (rather than RGB) due to historial reasons
 	- scaling and aspect ratios
 		- aspect ratio := width / height
-		- scaling without maintaining the aspect ratios can always to lead to distortion of images
+		- scaling without maintaining the aspect ratios can always lead to distortion of images
 		- image classification algorithms always assume fixed-size input (in the form of (z X z, where z = 32, 64, 224, 227, 256, 299 among popular choices))
 		- options include ignoring ratios and resize, resize along shortest dimension & center crop etc
 		- no best method of scaling/ resizing
@@ -95,7 +95,7 @@ Chap 4: Image Classification Basics
 	- illumination - an object subjet to different lighting conditions
 	- background clutter - Where's Wally?
 	- intra-class variation - all the different chairs, are still considered chairs
-	- The classifier must handle the combination of the challenges aforementioned.
+	- The classifier must handle not just independently but the combination of the challenges aforementioned.
 	- The success of an image classification job depends on the scope.
 		- Too broad a scope (try to classify everything) can cause the project to fail easily.
 		- A narrower/ more well-defined scope make the projects easier to manage.
@@ -119,4 +119,108 @@ Chap 4: Image Classification Basics
 - Traditional ML techniques on image classification involve feature extraction (raw pixels -> vector of numbers used for training). There is no need of feature extraction for a CNN.
 
 - There is a chance that trained NN performs well on test set does not perform well on new unseen data. This is a matter of generalization and will be discussed further.
+
+Chap 5: Datasets for Image Classification
+-----------------------------------------
+
+- MNIST: Modified National Institute of Standards and Technology - to identify handwritten digits
+	- the "hello world" of machine learning
+
+- Animals: Dogs, Cats and Panda
+	- combination of Kaggle's Dogs and Cats dataset + Panda images from the internet
+
+- CIFAR-10
+	- 10 classes
+	- substantially harder than MNIST to obtain decent accuracy score
+	- regularly used to benchmark new CNN architecture
+	
+- SMILES
+	- images of smiling and not smiling
+
+- Kaggles: Dogs vs Cats
+	- 25,000 images of dogs and cats with varying resolution
+	- how you preprocess the image can affect the accuracy of the classifiers
+
+- Flowers-17
+	- 80 images per class
+
+- ImageNet (IMLSVRC), Stanford Cars, Facial Recognition, Adience, CALTECH-101, Indoor CPVR
+
+- Rule of thumb: 1000 - 5000 images per class when training a neural network
+
+Chap 6: Configuring your development environment
+------------------------------------------------
+- touches on setting up the environment locally or on cloud
+
+Chap 7: First Image Classifer
+-----------------------------
+- Working with images
+	- always be aware of the dataset size; does it fit in the RAM?
+	
+- kNN
+	- hyperparameters tuning 
+		- `k`
+		- distance metrics (Euclidean Norm / Manhanttan metric etc) 
+	- for each test record, find the closest k points, assign the test record to the label where majority of the k points are;
 		
+- codes in running kNN  
+	- modules used	
+		-sklearn
+		- [OWN]: pyimagesearch
+		- imutils
+		- argparse
+	- TODO: select the hyperparameter `k`; in the example, k=1 was used
+
+- Some pros and cons of kNN:
+	- simple to train, but slow in testing
+		- but classifying a NEW testing point requires comparison to every single training point (to find the nearest k samples to make a classifying decision)
+		- classifcation time for new sample is o(N)
+		- always needs to store a replica of data somewhere (in-memory, as pointers to disk and so on ...)
+			- big troubles when the data is in terms of Gigabytes, Terabytes
+		- can mitigate the time cost by algorithms such as Approximate Nearest Neighbor (ANN) algorithms
+	- more suited for low-dimensional spaces (images are high dimensional)
+	- it is an algorithm that does not learn anything
+	- gives us a baseline performance to benchmark against those of NN and CNN
+	
+Chap 8: Parametrized Learning
+-----------------------------
+
+- instead of spending a large chunk of time in classifying each new record, we instead spend more time in training the datasets
+	- define the machine learning model to a number of parameters; regardless of the training size
+
+- TODO: def'n of parametrized learning (Russell and Norvig; 2009)
+
+- intro to linear classification
+	- reference: Anrej Kaparthy CS231n (Stanford)
+	- parametrization: 'process of defining the necessary parameters of a given model)
+	- 4 components of parametrized learning
+		- data 
+			- images (RGB pixels, extracted features (via algorithms ...), labels)
+		- scoring function
+			- defined by a function f
+				- input -> f(input) -> output class label
+		- loss function
+			- difference between predicted class labels and ground truth labels
+			- higher accuracy -> lower loss and vice-versa
+		- weights and biases (W and b)
+			- parameters of the classifer
+			- find W and b via some optimization methods that minimize the loss function
+	- once we learned our `W` and `b` via optimization, classifying new test data is fast.
+	- Linear Classification (from images to labels)
+		-Training set x_i and associated label y_i
+		- i = 1, 2, ..., N (N training samples) ; y_i \in {1, ..., K}, K is the number of category
+		- Define a scoring function `f` that maps images to class label scores
+			- f(x_i, W, b) = Wx_i + b, where dim(x_i) = (3072, 1), dim(W) = (3, 3072), dim(b) = (3, 1)
+			- What are the variables that we can change? `W` and `b`
+			- What is our goal? Use scoring function + loss function to optimize `W` and `b` to increase accuracy scores
+		
+	- Role of loss functions
+		- The loss funcion quantifies how well our scoring function (`W` and `b` learned?) is doing
+		- define: multi-class SVM loss
+			- hinge loss function
+			- squared hinge loss
+		
+			
+
+		
+	
