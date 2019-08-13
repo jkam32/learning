@@ -82,7 +82,7 @@ for (i in 1:19){
   # predict Salary, via subsetting dataframe
   pred <- test_mat[, names(coefi)] %*% coefi
   
-  
+  # MSE
   val_error[i] <- mean((hitters_df$Salary[test] - pred)^2)
   
 }
@@ -116,15 +116,23 @@ folds = sample(1:k, nrow(hitters_df), replace = TRUE)
 cv_errors <-  matrix(NA, k, 19, dimnames = list(NULL, paste(1:19)))
 
 # prediction function for regsubset class
+# note that there is no predict.regsubsets 
 predict.regsubsets <- function(object, newdata, id, ...){
+  
+  # in terms of formula Salary ~ .
   form <-  as.formula(object$call[[2]]) 
+
+  # in terms of design matrix
   mat <-  model.matrix(form, newdata)
+  
+  #
   coefi <- coef(object, id = id)
   xvars <- names(coefi)
   mat[, xvars] %*% coefi
   }
 
 # cross-validations
+# for each fold, fit the best subset regressions, up to max variables
 for (j in 1:k){
   # train on j-th fold (up to k = 10-fold in this case)
   best_fit <- regsubsets(Salary ~ ., data = hitters_df[folds != j, ], nvmax = 19)
@@ -147,7 +155,8 @@ library(glmnet)
 x <- model.matrix(Salary ~ ., data= hitters_df)[, -1] # excludes the `1` column
 y <- hitters_df$Salary
 grid <- 10 ** seq(10, -2, length = 100)
-# alpha = 0 -> ridgre; alpha = 1 -> lasso
+
+# alpha = 0 -> ridge; alpha = 1 -> lasso
 # by default glmnet standardizes the variable
 ridge_mod <- glmnet(x, y, alpha = 0, lambda = grid)
 dim(coef(ridge_mod)) # 20 x 100

@@ -237,8 +237,8 @@ Chap 5: Resampling Methods
 	- cv -> assess test errors
 	- bootstrap -> measure accuracy of parameter estimates
 
-- model assessment: evaluating model performance
-- model selection : select the right model flexibility
+- model assessment (performance) : evaluating model performance
+- model selection (flexibility) : select the right model flexibility
 
 Cross-validation  (CV)
 
@@ -295,7 +295,7 @@ Algo 6.2: Forward Selection
 1. Fit M_0 model without any predictor
 2. for k = 0, 1, 2, ..., p-1:
 	- consider p-k models that augment the M_0 model
-	- find the best among all these p-k models, call it M_(k+1) model
+	- find the best among all these p-k models, call it M_(k+1) model (#TOCHECK: in terms of what? R^2?)
 3. Select the best models out of M_0, M_1, ..., M_p models
 
 Note: Best Subset Selection Model is computationally infeasible for large p. Forward selection is computationally more feasible compared to 
@@ -393,9 +393,9 @@ Dimension Reduction Methods
 	- the formulation is such that the dimension reduction method is a special case of linear regression where the betas are subject to constraints
 - least squares based on M transformed variables (where M < p, the number of original variables) can outperform the original least squares,
   if the new coefficients are chosen carefully
-- to frame it differently, suppose we have X_1, X_2, ..., X_p `p` predictors, we would like to transform these `p` predictors to `M` variables such that M < p. We
-	call these transformed variables Z_1, Z_2, ..., Z_M. These Z's are uncorrelated with each other, and that the first extracted component will capture the largest variation
-	among the Xs, the second extracted component will capture less variation and even less variation for subsequent extracted components.
+- to frame it differently, suppose we have X_1, X_2, ..., X_p `p` predictors, we would like to transform these `p` predictors to `M` variables such that M < p. 
+
+We call these transformed variables Z_1, Z_2, ..., Z_M. These Z's are uncorrelated with each other, and that the first extracted component will capture the largest variation among the Xs, the second extracted component will capture less variation and even less variation for subsequent extracted components.
  
 
 Principal Components Regression (PCR)
@@ -410,14 +410,11 @@ Partial Least Square (PLS)
 --------------------------
 - in PCA, we are constructing fewer principal components that help explain the variation in X's. This is however done without referring to Y, the response variable.
 - PLS attempts to find directions (or linear combinations) the explain BOTH predictors and response. 
-- When finding the first component, PLS takes into account (or places more weight onto) predictors that are highly correlated with the response, thus yielding a direction that is
-  tilted towards variables that are highly correlated with the responses.
+- When finding the first component, PLS takes into account (or places more weight onto) predictors that are highly correlated with the response, thus yielding a direction that is tilted towards variables that are highly correlated with the responses.
 - hand-waving way of the algorithm:
 	- Suppose we have X_1, X_2, ..., X_p predictors and a response variable Y.
-	- To obtain Z_1, \phi_j1 is set to the coefficient of simple linear regression of Y onto X_j. As a result, Z_1 places the highest weightage on variables X_j that has the highest
-	  correlation with Y.
-	- To obtain Z_2, regress each X on Z_1, get the residuals for each X (adjusted for Z_1) (thought of as information not captured by the first PLS component). 
-		Regress Y on each residual variable for X, get the coefficients, set these coefficients equal to \phi_j2.
+	- To obtain Z_1, \phi_j1 is set to the coefficient of simple linear regression of Y onto X_j. As a result, Z_1 places the highest weightage on variables X_j that has the highest correlation with Y.
+	- To obtain Z_2, regress each X on Z_1, get the residuals for each X (adjusted for Z_1) (thought of as information not captured by the first PLS component).  Regress Y on each residual variable for X, get the coefficients, set these coefficients equal to \phi_j2.
 	- Repeat till M PLS components are constructed.
 	
 
