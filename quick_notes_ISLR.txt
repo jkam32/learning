@@ -417,13 +417,97 @@ Partial Least Square (PLS)
 	- To obtain Z_2, regress each X on Z_1, get the residuals for each X (adjusted for Z_1) (thought of as information not captured by the first PLS component).  Regress Y on each residual variable for X, get the coefficients, set these coefficients equal to \phi_j2.
 	- Repeat till M PLS components are constructed.
 	
+-------------------------------
+Chap 7: Moving beyond linearity
+-------------------------------
+- overview
+	- polynomial regression
+	- step functions
+		- cut the range of variable into K distinct regions and fit piecewise constant functions
+	- regression splines
+		- divide the range of X into K distinct regions, then fit a polynomial function within each region
+		- polynomials are constrained to join smoothly at the boundary
+	- smoothing splines
+		- similar to regression splines
+		- arise from the problem of min (RSS + \lambda \int g'' dt)
+		- the solution to the previous problem is natural cubic spline with knot at every x_i. 
+	- local regression (loess)
+	- generalized additive model (GAM)
 
+- polynomial regression
+	- extension of the linear regression model
+	- unusual to use polynomial of degree > 4, as it may become overly flexible 
+	- curve may go wild near the boundary (where there is little or no data)
+	- imposes a global structure on non-linear function of X
 
+- step functions
+	- break the range into K bins
+	- fit a constant linear functions within each bin
+	- this is really just a dummy variable regression; refer to materials on dummy variable regression if needed
+	
+- basis functions
+	- #TODO: write the def'n
+	- choice of basis functions: polynomials; piecewise constant function; Fourier series; wavelets
 
+- regression splines
+	- instead of fitting a global polynomial functions, fit a piecewise polynomial functions with a knot at `c`. This in turn generates several possible scenario:
+		- piecewise cubic (with discontinuity at knot `c`)
+		- continuous piecewise cubic (continuous piecewise cubic (with not differentiable at knot `c`)
+		- cubic spline (continuous up to second degree deriviative at knot `c`; i.e. very "smooth") with 5 degrees of freedom (supposedly 8 degrees of freedom, but continuity at knot, continuous first derivative and second derivatives reduce the df by 3)
+		- #TOCHECK: Each constraint that we impose on the continuous cubic polynomial frees up on degree of freedom by reducing the complexity of the fit. For now think of degrees of freedom as the parameters that need to be estimated.
+		- cubic spline with K notes uses K+4 degrees of freedom
+	- d-degree spline
+		- defn: piecewise degree-d polynomial at each knot, with continuity up to d-1 derivatives
+	- spline basis representations
+		- cubic spline with K knots can be represented as the following:
+			y = b0 + b1x + b2x^2 + b3x^3 + b4h(x, z1) + ... + b_(k+3)h(x, zk), where h(x,z) is a truncated power basis function, z are knots
+		- df = K + 4 (4 comes from the usual cubic polynomial regression)
+		- note that splines can have high variances when X takes on an extremely small or large value. 
+		- to solve the high variance problem at the boundary, impose additional boundary constraints where the function is required to be linear for more stable estimates
+		- the next questions is to choose the number and location of knots:
+			- more knots at region where the function is expected to be more flexible and fewer knots at region where the function is expected to be more stable
+			- use CV!
+		- reasons of why splines are superior to polynomial regressions
+			- for a fixed degree of freedom (say, 15), the monomial term can go up to 15 (which could be ridiculous); splines can be constrained to degree 3 with the addition of knots ==> more stable estimates!; also high degree polynomials regression can exhibit wild behavior near the boundary of predictor
+			- splines can place more knots over the region where flexibility is expected
+
+- smoothing splines
+	- #TODO: Write the formulation of the problem:
+		min (RSS + \lambda \int g''dt)
+	- \lambda is the tuning parameter; 
+	- \int g'' dt is the sum of the change of slope over the range; this value is high if `g` is wiggling a lot and the low if `g` is relatively smooth. A large lambda value will cause g to be smooth, small lambda will cause g to be wiggly.
+	- Turns out that the function `g` that minimizes the formulation is a natural cubic spline with knots at every point (x_1, x_2 ,..., x_n).
+	- choosing \lambda
+		- note that a natural cubic spline with knot at every point `x` will have too many degrees of freedom, but essentially the df is controlled by the hyperpameter \lambda, hence the term "effective degrees of freedom" (df_lambda)
+		- as \lambda increases from 0 to infinity, df_lambda increases from n to 2 
+		- instead of having `n` nominal degrees of freedom, the df_lambda is instead shrunken by \lambda (the higher df_lambda the more flexible)
+		- #TODO: Sketch the way of deriving the effective degree of freedom
+		- can choose \lambda using a close-form formula 
+
+- local regression:
+	- #TODO: The algorithm
+	
+- generalized additive models (GAM)
+	- usual regression formulation:
+		\beta_0 + \sum_i \beta_i \x_i + \epsilon_i
+	- gam formulation instead allows for a flexible representations:
+		\beta_0 \sum f_j(x_j); where each f_j(.) can be any transformation applied to variable x_j
+		- for example, can fit natural cubic spline with different df for the first two variables and fit a piecewise constant function for the third variable
+		- the contribution of each variable is "additive"
+	- fitting smoothing spline is more difficult than fitting a natural cubic spline (can be fit using the usual regression techniques); the process of fitting is known as "backfitting"; handled by software
+	- #TODO: check out "backfitting", if time permits
+	- pros and cons of GAM
+		- pros 
+			- allows for modelling of non-linear relationship between x_j and y
+			- inference still holds; we can examine the influence of variable x_j on y while holding all other variables fixed
+		- cons
+			- can miss out interactions between variables
+			- interactions are added in linear regression via X_j * X_k; in GAM scenario interaction added via f_jk(X_j, X_k)
+	
 	
 
 
-
+	
 
 
 
