@@ -505,8 +505,55 @@ Chap 7: Moving beyond linearity
 			- interactions are added in linear regression via X_j * X_k; in GAM scenario interaction added via f_jk(X_j, X_k)
 	
 	
+------------------------
+Chap 8: Tree-based Model
+------------------------
 
+- overview
+	- tree-based methods often involve segmenting/ stratifying predictor spaces
+	- examples of tree-based methods
+		- decision trees
+		- bagging
+	    - random forest
+		- boosting
+	- bagging/boosting/random forests produce multiple trees, which are then combined to yield a single output
+	
+- decision trees
+	- regression trees
+		- easier to interpret
+		- process overall
+			- divide the predictor space, X_1, X_2, ..., X_p into J distinct and non-overlapping regions; R_1, R_2, ..., R_J
+				- #TODO: write down the formulation of finding R_1, R_2 ,..., R_J to minimize RSS
+				- How to find R_1, R_2, ..., R_J? Use a top-down, greedy approach known as recursive binary splitting
+				- top-down: starting from the top of the tree
+				- greedy: the split is done at each step (without taking into possible future split that will result in a huge reduction in RSS)
+					- each split is always done on existing regions to reduce RSS
+			- for observations that fall in R_i, use the mean of the response values of training observations in R_i
+		- tree pruning
+			- smaller tree with fewer splits can lead to lower variance at the cost of a little bias
+			- grow a very large tree T_0, and prune it back to obtain a subtree. Estimate the test error using cross-validation (i.e. cv error). However,
+			there are large numbers of subtrees to consider; 
+			- here comes cost complexity pruning/ weakest link pruning; 
+				- #TODO: write down the formulation of cost complexity pruning (as a function of \alpha)
+				- for each value of \alpha, there is a subtree (?) T \subset T_0 such that the cost function from the previous point is minimized (probably hard to prove ...)
+				- the formulation is similar to \lambda in lasso regression
+				- when \alpha = 0 => subtree is the original big tree
+				- when \alpha increases => results in trees with fewer leaf nodes
+		- algorithm of building regression trees
+			- #TODO: write the algorithm
+	- classification trees
+		- assign result to a record based on the most commonly occuring class in the node
+		- splitting for regression trees is done based on RSS; for classification, the following are used instead
+			- #TODO: write down the following formulation
+			- classification rate
+			- Gini index (measures the node purity)
+			- entropy 
+			- Gini index and entropy are quite similar
+	- tree versus linear models
+	- pros and cons of trees
 
+- bagging/ random forest/ boosting
+	- 
 	
 
 
