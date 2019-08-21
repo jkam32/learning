@@ -531,14 +531,13 @@ Chap 8: Tree-based Model
 			- for observations that fall in R_i, use the mean of the response values of training observations in R_i
 		- tree pruning
 			- smaller tree with fewer splits can lead to lower variance at the cost of a little bias
-			- grow a very large tree T_0, and prune it back to obtain a subtree. Estimate the test error using cross-validation (i.e. cv error). However,
-			there are large numbers of subtrees to consider; 
+			- grow a very large tree T_0, and prune it back to obtain a subtree. Estimate the test error using cross-validation (i.e. cv error). However, there are large numbers of subtrees to consider; 
 			- here comes cost complexity pruning/ weakest link pruning; 
 				- #TODO: write down the formulation of cost complexity pruning (as a function of \alpha)
-				- for each value of \alpha, there is a subtree (?) T \subset T_0 such that the cost function from the previous point is minimized (probably hard to prove ...)
-				- the formulation is similar to \lambda in lasso regression
+				- for each value of \alpha, there is a subtree T \subset T_0 such that the cost function from the previous point is minimized (#TOCHECK: How to find the corresponding subtree?)
+				- the \alpha is similar to \lambda in lasso regression
 				- when \alpha = 0 => subtree is the original big tree
-				- when \alpha increases => results in trees with fewer leaf nodes
+				- when \alpha increases => results in trees with fewer leaf nodes (|T| decreases)
 		- algorithm of building regression trees
 			- #TODO: write the algorithm
 	- classification trees

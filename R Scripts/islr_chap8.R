@@ -4,12 +4,11 @@ library(ISLR)
 
 # Can't reproduce the example in ISLR Chap 8 tree part;
 # Pruned tree has a lower accuracy than original tree
-#
 
 High <- ifelse(Carseats$Sales <= 8, "No", "Yes")
 Carseats <- data.frame(Carseats, High)
 
-# classification tree
+#### Classification Tree ####
 tree_carseats <- tree(High ~ .- Sales, Carseats)
 summary(tree_carseats)
 
@@ -53,3 +52,31 @@ text(dtree_prune, pretty = 0)
 new_pred <- predict(dtree_prune, newdata = df_test, type = "class")
 table(y_test, new_pred)
 # (89 + 62) / 200 
+
+#### Regression Tree ####
+library(MASS)
+set.seed(1)
+train <- sample(1:nrow(Boston), nrow(Boston) / 2)
+tree_boston <- tree(medv ~ ., data = Boston, subset = train)
+summary(tree_boston)
+plot(tree_boston)
+text(tree_boston, pretty = 0)
+
+# tree pruning
+# by default based on deviance (RSS?)
+cv_boston <- cv.tree(tree_boston)
+
+# original tree is chosen, nodes = 7
+plot(cv_boston$size, cv_boston$dev, type = "b")
+
+# if we really want to prune the tree
+tree_boston_prune <- prune.tree(tree_boston, best = 5)
+plot(tree_boston_prune)
+text(tree_boston_prune, pretty = 0)
+
+# prediction; using the original tree following cross-validation
+yhat <- predict(tree_boston, newdata = Boston[-train, ])
+boston_test <- Boston$medv[-train]
+plot(yhat, boston_test)
+abline(0, 1)
+sqrt(mean((yhat - boston_test) ** 2))
