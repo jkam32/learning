@@ -48,7 +48,7 @@ of predictors is flawed. To correct for this, use F-stats that accounts for the 
 F-stats cannot be used when p (number of predictors) > n (sample size). You cannot even fit a multiple linear regression.
 
 TWO: Deciding on important variables.
-- Forward selection (greedy approach, might include variables that are significant earlier). Start with null model, then include variables one by one
+- Forward selection (greedy approach, might include variables that are (NOT) significant earlier). Start with null model, then include variables one by one
 - Backward selection (start with all variables, then drop the insignificant variables)
 - Mixed selection (Forward + Backward)
 
@@ -95,8 +95,7 @@ they are significant or not.
 
 The interaction is mostly done through the multiplication, i.e. take X_1 and multiplied by X_2.
 
-An interaction between categorical variable and quantitative variable has a pretty nice interpretation. It is amount to fitting several regression lines with different 
-intercept and slope as the categorical variable takes on different values.
+An interaction between categorical variable and quantitative variable has a pretty nice interpretation. It is amount to fitting several regression lines with different intercept and slope as the categorical variable takes on different values.
 
 THREE: Non-linear relationships
 Include higher order terms to model potential non-linear relationship (e.g. polynomial of higher orders)
@@ -189,7 +188,7 @@ Linear Discriminant Analysis (LDA)
 - Why use another method in place of logistic regression?
 	- when classes are well-separated, estimates for parameters in logistic regression are unstable
 	- if number of observations is small and X's are approximately distributed normally, LDA is more stable
-	- LDA is more popular than Logistic Regression
+	- LDA is more popular than Logistic Regression (when there are > 2 classes)
 	
 - P(Y = k |X = x) = P(Y = k, X = x)/ P(X = x) = P(X = x | Y = k) * P(Y = k) / P(X = x); P(X = x | Y = k) is where you make an assumption
 	about the distribution.
@@ -592,7 +591,34 @@ Chap 8: Tree-based Model
 			- number of trees: B (matters for boosting, unlike random forest or bagging). Too large a B can lead to overfitting. Usually selected via cross validation.
 			- shrinkage parameter, \lambda; this controls the rate at which boosting learns; common values are .01 or .001.
 			- number of splits d; controls the complexity of boosted ensemble. d = 1 implies a decision stump (one-level decision tree)
-		- #TODO: write down the algorithm for boosting (cover at least the regression context)
+		- Algorithm: Boosting for regression trees
+			1) Set \hat(f)(x) = 0. r_i = y_i for all i in the training set. (Note that `r_i` is actually the residuals, and in boosting you are fitting the residuals instead of `y`
+			2) For b = 1, 2, ..., B, do: #(B is the number of trees)
+				(a) Fit a tree \hat(f)^b with d splits (i.e. d + 1 terminal nodes) to the training data (X, r), where r is the residual updated in each iteration.
+				(b) Update \hat(f) by adding a shrunken version of \hat(f)^b:
+						\hat(f)(x) <- \hat(f)(x) + \lambda \hat(f)^b (x)
+				(c) Update the residuals:
+						r_i <- r_i - \lambda \hat(f)^b(x)
+			3) Output the boosted model: 
+						\hat(f)(x) = \sum_{b=1}^B \lambda \hat(f)^b(x)
+------------------------
+Chap 9: Support Vector Machine
+------------------------
+
+- overview
+	- maximal margin classifier (requires the class be separated by a linear boundary and therefore quite restrictive)
+	- support vector classifier (applicable for broader range of datasets)
+	- support vector machine (applicable to non-linear boundary)
+	
+- maximal margin classifier
+	- loose definition of a hyperplane
+		- a plane of p-1 dimension that divides p-dimensional space into two halves
+		- #TODO: the formula of a hyperplane (how bout inequality (> 0, < 0)
+		- 
+		
+	
+
+
 		
 
 
