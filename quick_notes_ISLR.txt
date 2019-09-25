@@ -546,20 +546,21 @@ Chap 8: Tree-based Model
 			- #TOCHECK: the math on Gini Index, Entropy
 			- classification rate
 			- Gini index (measures the node purity)
+				- the higher the it is, the more homogenous the classes are (the class for all is the same)
 			- entropy 
 			- Gini index and entropy are quite similar
 	- tree versus linear models
 		- which one is better? depends
-		- for linearl boundary case, linear model is a good choice
+		- for linear boundary case, linear model is a good choice
 		- for non-linear boundary case, decision tree is a good choice
 	- pros and cons of trees
 		- pros 
 			- easy to explain
 			- mirrors human way of decision making
-			- interpretable if the tree is not too complexity
+			- interpretable if the tree is not too complex
 			- handle categorical varibles without creating dummy variables
 		- cons 
-			- lower predictive accuracy viz-a-viz other methods 
+			- lower predictive accuracy viz-a-viz other methods #TOCHECK
 			- non-robust; sensitive to a small change in data #TOCHECK
 			
 - bagging/ random forest/ boosting
@@ -614,7 +615,32 @@ Chap 9: Support Vector Machine
 	- loose definition of a hyperplane
 		- a plane of p-1 dimension that divides p-dimensional space into two halves
 		- #TODO: the formula of a hyperplane (how bout inequality (> 0, < 0)
-		- 
+	- classification using a separating hyperplane
+		- assume that the classes can be separated perfectly, and that there are two classes y_i = 1 or y_i = -1.
+		- A separating hyperplane has the property that:
+			y_i(\b_0 + \b_1x_1 + \b_2x_2 + ... + \b_px_p) > 0 for all i
+		- Given any test observation x*, assign x* to 1 if f(x*) > 0 and -1 if f(x*) < 0.
+		- f(x*) measures the distance of the observation from the hyperplane, the larger it is the more confident we are. Conversely if f(x*) is close to zero, then we are more uncertain about the assignment.
+	- maximal margin classifier
+		- #TODO
+		- define "margin"
+		- define "support vectors" in this context. The hyperplane only depends on these support vectors and not the rest of the training observations.
+	- formulation of maximal margin classifier
+		- define the optimization problem of maximal margin classifier
+			- In English: maximize the margin M s.t. the constraints that (i) all the observations are on the right side (ii) the distance between the observation and hyperplane is at least M
+	- caveat
+		- More often than not, there does not exist a separating hyperplane to separate the classes perfectly. Need to resort to soft margin classifier. The generalization of maximal margin classifier is known as support vector classifier.
+		- not robust, very sensitive to the shifting of support vectors.
+		
+- support vector classifier
+	- #TODO: formulate the optimization problem of the support vector classifier; define slack variables (the epsilons), C (the hyperparameter tuning), M (the margin). Attempt to explain the optimization problem in a layman way.
+	- the hyperplane is a function of (i) points on the margin and (ii) points on the wrong side of the margin. These points are collectively called support vectors.
+	- the hyperparameter is `C`, which measures the tolerance of the errors. `C` is a tuning parameter that measures the bias-variance tradeoff. High `C` indicates high toloerance of errors, high margin, higher bias and low variance. Low `C` indicates a low degree of tolerance, resulting in low margin, lower bias and higher variance (because of fitting the data closely).
+	- it is still a classifier with linear boundary. For problems with non-linear boundary, use support vector machine.
+
+- support vector machine
+	-
+		
 		
 	
 
