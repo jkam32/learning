@@ -648,6 +648,9 @@ Chap 9: Support Vector Machine
 			- K(x_i, x_j) = <x_i, x_j>: linear kernel
 			- K(x_i, x_j) = (1 + \sum_{p} x_i x_j) ^ d: polynomial kernel
 			- radial kernel - those points that are far from the testing points carry fewer weightage, as such exhibits local behavior
+	- classification of more than 2 classes
+
+- 
 			
 		
 		
