@@ -639,7 +639,16 @@ Chap 9: Support Vector Machine
 	- it is still a classifier with linear boundary. For problems with non-linear boundary, use support vector machine.
 
 - support vector machine
-	-
+	- methods discussed up to now only cater for linear decision boundary, we will need to extend the framework to cater for non-linear boundary.
+	- suppose we have p features (X_1, X_2, ..., X_p). consider in addition the square of the features X_1 ** 2, X_2 ** and X_p ** 2 and the same formulation of optimization that we discuss previously. We can obtain non-linear decision boundary.
+	- However we can enlarge the feature space through many ways (taking higher orders, interaction term, exponential and so on). Enlarging the feature space of the original support vector classifier in a certain ways that ensures efficient computation leads to support vector machine.
+	- the solution to the optimization problem of support vector classifier involves ONLY the inner product of observations.
+		- f(x) = \beta_0 + \sum_{i \in S} \alpha_i <x, x_i> , where  <a, b> is the dot product, and S is the indices of points that are support vectors
+		- replace the dot product above with kernel, K(x_i, x_j), and you get a generalization beyond dot product and a representation for support vector machines
+			- K(x_i, x_j) = <x_i, x_j>: linear kernel
+			- K(x_i, x_j) = (1 + \sum_{p} x_i x_j) ^ d: polynomial kernel
+			- radial kernel - those points that are far from the testing points carry fewer weightage, as such exhibits local behavior
+			
 		
 		
 	
